@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "akarpov-file-tools"
+version = "0.1.0"
+description = ""
+authors = ["sanspie <sanspie@akarpov.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.115.0"
+uvicorn = "^0.31.0"
+python-multipart = "^0.0.12"
+preview-generator = "^0.29"
+pillow = "^10.4.0"
+python-magic = "^0.4.27"
+python-slugify = "^8.0.4"
+psutil = "^6.0.0"
+textract = {git = "https://github.com/Alexander-D-Karpov/textract.git", branch = "master"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

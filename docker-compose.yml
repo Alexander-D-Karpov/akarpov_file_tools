@@ -1,0 +1,13 @@
+services:
+  preview_service:
+    build:
+      context: ./preview_service
+      dockerfile: Dockerfile
+    image: akarpov_preview_service
+    container_name: akarpov_preview_service
+    volumes:
+      - ./preview_service:/app
+    env_file:
+      - ./.envs/.local/.preview_service
+    ports:
+      - "8987:8001"
