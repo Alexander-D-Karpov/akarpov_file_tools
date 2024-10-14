@@ -1,20 +1,39 @@
 import magic
-from preview_generator.manager import PreviewManager
+import textract
+import chardet
 
-cache_path = "/tmp/preview_cache"
 
 class MetaService:
     def __init__(self):
-        self.manager = PreviewManager(cache_path, create_folder=True)
         self.mime = magic.Magic(mime=True)
 
     def get_file_mimetype(self, file_path: str) -> str:
         return self.mime.from_file(file_path)
 
-    def get_description(self, file_path: str) -> str:
-        if self.manager.has_text_preview(file_path):
-            return self.manager.get_text_preview(file_path)
-        return ""
+    def extract_content(self, file_path: str) -> str:
+        try:
+            # First, try to extract content using textract
+            content = textract.process(file_path)
+
+            # Detect the encoding of the extracted content
+            detected = chardet.detect(content)
+            encoding = detected["encoding"] if detected["encoding"] else "utf-8"
+
+            # Decode the content using the detected encoding
+            return content.decode(encoding, errors="replace")
+        except Exception as e:
+            print(f"Error extracting content: {str(e)}")
+
+            # If textract fails, try to read the file directly
+            try:
+                with open(file_path, "rb") as file:
+                    content = file.read()
+                    detected = chardet.detect(content)
+                    encoding = detected["encoding"] if detected["encoding"] else "utf-8"
+                    return content.decode(encoding, errors="replace")
+            except Exception as e:
+                print(f"Error reading file directly: {str(e)}")
+                return ""
 
 
 meta_service = MetaService()

@@ -1,13 +1,19 @@
 services:
   preview_service:
     build:
-      context: ./preview_service
+      context: ./
       dockerfile: Dockerfile
     image: akarpov_preview_service
     container_name: akarpov_preview_service
     volumes:
-      - ./preview_service:/app
+      - ./:/app
     env_file:
-      - ./.envs/.local/.preview_service
+      - .env
     ports:
       - "8987:8001"
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
